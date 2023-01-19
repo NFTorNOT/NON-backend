@@ -44,12 +44,21 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-            {{- range $key, $secret := $.Values.envSecrets }}
-            - name: {{ $key }}
+            {{- range $secret := $.Values.envSecrets }}
+            - name: {{ $secret.envName }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ $secret }}
-                  key: {{ $key | quote }}
+                  name: {{ $secret.secretName }}
+                  key: {{ $secret.secretKey | quote }}
+            {{- end }}
+            {{- range $key, $value := .Values.awsSecrets }}
+            {{- range $refs := $value }}
+            - name: {{ $refs }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $key }}
+                  key: {{ $refs | quote }}
+            {{- end }}
             {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

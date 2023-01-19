@@ -2,4 +2,6 @@
 
 aws s3 cp s3://plg-works-configs/non/staging/.env ./.env
 source .env
-node appServer.js
+node db/seed.js
+node db/migrate.js
+npm start

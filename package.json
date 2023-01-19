@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www",
+    "generate-openapi-docs": "node ./documentation/openapi/generate.js",
+    "start-dev": "source ./set_env_vars.sh ; npm start",
+    "pre-commit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -12,11 +15,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/NFTorNOT/NON-backend/issues"
-  },
   "homepage": "https://github.com/NFTorNOT/NON-backend#readme",
   "dependencies": {
+    "@plgworks/base": "1.0.2",
+    "@plgworks/unicache": "1.0.0",
     "@pushprotocol/restapi": "^0.2.2",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
@@ -24,24 +26,46 @@
     "apollo-link-http": "^1.5.17",
     "aws-sdk": "2.1247.0",
     "axios": "0.27.2",
-    "cors": "^2.8.5",
+    "continuation-local-storage": "3.2.1",
+    "cookie-parser": "1.4.5",
+    "cors": "2.8.5",
     "ethers": "^5.7.2",
     "express": "4.18.1",
-    "graphql": "^15.8.0",
-    "graphql-tag": "^2.12.6",
-    "ipfs-api": "^26.1.2",
-    "ipfs-http-client": "^59.0.0",
+    "graphql": "15.8.0",
+    "graphql-tag": "2.12.6",
+    "helmet": "4.4.1",
+    "html-entities": "2.1.0",
+    "ipfs-api": "26.1.2",
+    "ipfs-http-client": "59.0.0",
+    "js-base64": "3.7.2",
     "mime": "^3.0.0",
     "moment-timezone": "^0.5.39",
     "morgan": "1.10.0",
+    "mysql": "2.18.1",
     "nft.storage": "^7.0.0",
     "node-fetch": "^2.6.7",
     "npm": "^9.1.2",
+    "sanitize-html": "2.3.2",
+    "swagger-jsdoc": "6.2.1",
+    "swagger-ui-express": "4.3.0",
     "uuidv4": "^6.2.13",
     "web3.storage": "^4.4.0"
   },
   "devDependencies": {
     "eslint": "7.20.0",
-    "hardhat": "^2.12.3"
+    "hardhat": "2.12.3",
+    "lint-staged": "10.5.4",
+    "parse-function": "5.6.10",
+    "pre-commit": "1.2.2",
+    "prettier": "1.13.7"
+  },
+  "pre-commit": [
+    "pre-commit"
+  ],
+  "lint-staged": {
+    "*.js": [
+      "prettier --write --config .prettierrc.json",
+      "git add"
+    ]
   }
 }

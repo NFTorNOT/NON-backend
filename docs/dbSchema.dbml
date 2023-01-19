@@ -1,0 +1,126 @@
+// Documentation URL - https://www.dbml.org/docs/
+// Editor: https://dbdiagram.io/d
+
+Table images {
+  id bigint
+  shortened_url varchar
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
+  kind tinyint [
+    note: '
+    1 = NFT,
+    2 = PROFILE
+  ']
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+      (id) [pk]
+  }
+}
+
+Table texts {
+  id bigint
+  text varchar
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+      (id) [pk]
+  }
+}
+
+Table lens_posts {
+  id bigint
+  theme_id bigint [ref: > themes.id]
+  owner_user_id bigint [ref: > users.id]
+  lens_publication_id varchar
+  title varchar
+  description_text_id bigint [ref: - texts.id]
+  image_id bigint [ref: - images.id]
+  total_votes integer
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE
+    ']
+  created_at timestamp
+  updated_at timestamp
+  indexes {
+      (id) [pk]
+      (lens_publication_id) [unique]
+      (theme_id, status)
+  }
+}
+
+Table votes {
+  id bigint
+  lens_post_id bigint [ref: > lens_posts.id]
+  voter_user_id bigint [ref: > users.id]
+  status tinyint [
+    note: '
+    1 = VOTED,
+    2 = IGNORED
+    ']
+  collect_nft_transaction_hash varchar
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+      (id) [pk]
+      (lens_post_id, voter_user_id) [unique]
+      (voter_user_id, status)
+  }
+}
+
+Table users {
+  id bigint
+  lens_profile_id varchar
+  lens_profile_username varchar
+  lens_profile_display_name varchar
+  lens_profile_owner_address varchar
+  lens_profile_image_id bigint [ref: - images.id]
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = DELETED
+    ']
+  cookie_token varchar
+  created_at timestamp
+  updated_at timestamp
+
+  indexes {
+      (id) [pk]
+      (lens_profile_id, lens_profile_owner_address) [unique]
+  }
+}
+
+Table ipfs_objects {
+  id bigint
+  kind tinyint [
+    note: '
+    1 = IMAGE,
+    2 = LENS_PUBLICATION_METADATA
+    ']
+  cid varchar
+  created_at timestamp
+  updated_at timestamp
+  indexes {
+      (id) [pk]
+  }
+}
+
+Table themes {
+  id bigint
+  name varchar
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE,
+    ']
+  created_at timestamp
+  updated_at timestamp
+  indexes {
+      (id) [pk]
+  }
+}

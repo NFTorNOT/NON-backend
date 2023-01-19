@@ -1,0 +1,104 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "nftornot-backend"
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 5000
+
+ingress:
+  enabled: true
+  className: alb
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/group.name: thursday
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /health-checker
+  hosts:
+    - host: staging.nftornot.com
+      paths:
+        - path: /api
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+env:
+  NA_ENVIRONMENT: 'staging'
+  NA_PORT: '5000'
+  NA_DEFAULT_LOG_LEVEL: 'debug'
+  NON_API_DOMAIN: 'http://staging.nftornot.com'
+  NA_COOKIE_DOMAIN: 'staging.nftornot.com'
+  NA_DEVOPS_APP_NAME: 'non-api'
+  NA_DEVOPS_ENV_ID: 'dev1-sandbox'
+  NA_DEVOPS_IP_ADDRESS: '127.0.0.1'
+  NA_DEVOPS_SERVER_IDENTIFIER: '123456'
+  NA_MYSQL_CONNECTION_POOL_SIZE: '3'
+  NA_DB_SUFFIX: 'staging'
+  S3_BUCKET: 'non-staging-statc-files'
+  S3_AWS_REGION: 'us-east-2'
+  S3_URL_PREFIX: ''
+  S3_AWS_MASTER_FOLDER: ''
+  NA_CDN_URL: ''
+
+
+envSecrets:
+  - envName: AWS_ACCESS_KEY_ID
+    secretName: thursday-staging-api-user
+    secretKey: AWS_ACCESS_KEY_ID
+  - envName: AWS_SECRET_ACCESS_KEY
+    secretName: thursday-staging-api-user
+    secretKey: AWS_SECRET_ACCESS_KEY
+  - envName: NA_MAIN_DB_MYSQL_HOST
+    secretName: non-staging-db
+    secretKey: host
+  - envName: NA_MAIN_DB_MYSQL_USER
+    secretName: non-staging-db
+    secretKey: username
+  - envName: NA_MAIN_DB_MYSQL_PASSWORD
+    secretName: non-staging-db
+    secretKey: password
+
+awsSecrets:
+  non-staging-api:
+    - NA_COOKIE_SECRET
+    - NA_ENCRYPTION_KEY
+    - API_COOKIE_ENCRYPTION_SALT
+    - PROFILE_ID
+    - LENS_TESTNET_URL
+    - ALCHEMY_ENDPOINT
+    - STABILITY_KEY
+    - WALLET_ADDRESS
+    - WALLET_PK
+    - SIGNER_PK
+    - INFURA_PROJECT_ID
+    - INFURA_API_SECRET_KEY
+    - WEB3_STORAGE_IPFS_TOKEN
