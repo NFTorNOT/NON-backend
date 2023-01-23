@@ -44,10 +44,22 @@ const webRouteSpec = {
     tag: 'Generate Flow'
   },
 
+  'GET /api/active-themes': {
+    apiName: apiNameConstants.getActiveThemes,
+    summary: 'Get active themes',
+    tag: 'Generate Flow'
+  },
+
   'POST /api/submit-to-vote': {
     apiName: apiNameConstants.submitToVote,
     summary: 'Record lens post and image',
     tag: 'Generate Flow'
+  },
+
+  'GET /api/recent-upvoted-nfts': {
+    apiName: apiNameConstants.getRecentUpvoted,
+    summary: 'Get recent upvoted NFTs',
+    tag: 'Collect NFTs'
   },
 
   'GET /api/collect-nfts': {
