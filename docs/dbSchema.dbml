@@ -35,6 +35,7 @@ Table lens_posts {
   owner_user_id bigint [ref: > users.id]
   lens_publication_id varchar
   title varchar
+  filter varchar
   description_text_id bigint [ref: - texts.id]
   image_id bigint [ref: - images.id]
   total_votes integer
