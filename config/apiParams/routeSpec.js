@@ -5,19 +5,19 @@ const webRouteSpec = {
   'POST /api/connect': {
     apiName: apiNameConstants.authenticateUser,
     summary: 'Authenticate and signin user',
-    tag: 'Authenticaion'
+    tag: 'Authentication'
   },
 
   'POST /api/logout': {
     apiName: apiNameConstants.logout,
     summary: 'Logs out authenticated user',
-    tag: 'Authenticaion'
+    tag: 'Authentication'
   },
 
   'GET /api/current-user': {
     apiName: apiNameConstants.getCurrentUser,
     summary: 'Get authenticated user and details',
-    tag: 'Authenticaion'
+    tag: 'Authentication'
   },
 
   'POST /api/reaction': {
