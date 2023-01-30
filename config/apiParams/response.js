@@ -24,7 +24,9 @@ const webResponse = {
       [entityTypeConstants.themesMap]: responseEntityKey.themes,
       [entityTypeConstants.usersMap]: responseEntityKey.users,
       [entityTypeConstants.activeThemeIds]: responseEntityKey.activeThemeIds,
-      [entityTypeConstants.getNFTsToVoteListMeta]: responseEntityKey.meta
+      [entityTypeConstants.getNFTsToVoteListMeta]: responseEntityKey.meta,
+      [entityTypeConstants.stats]: responseEntityKey.stats,
+      [entityTypeConstants.userStats]: responseEntityKey.userStats
     }
   },
 
