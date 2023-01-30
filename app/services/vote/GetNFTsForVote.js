@@ -375,6 +375,7 @@ class GetNFTsForVote extends ServiceBase {
       [entityTypeConstants.activeThemeIds]: oThis.activeThemeIds,
       [entityTypeConstants.stats]: oThis.stats,
       [entityTypeConstants.userStats]: oThis.currentUserId ? oThis.userStats : null,
+      isLoggedIn: oThis.currentUserId,
       meta: oThis.responseMetaData
     });
   }

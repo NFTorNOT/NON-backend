@@ -9,6 +9,7 @@ const rootPrefix = '../..',
   sanitizer = require(rootPrefix + '/helpers/sanitizer'),
   apiNameConstants = require(rootPrefix + '/lib/globalConstant/apiName'),
   routeHelper = require(rootPrefix + '/routes/helper'),
+  entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType'),
   responseConfig = require(rootPrefix + '/config/apiParams/response');
 
 const router = express.Router();
@@ -85,6 +86,12 @@ router.get('/nfts', sanitizer.sanitizeDynamicUrlParams, function(req, res, next)
   const dataFormatterFunc = async function(serviceResponse) {
     const formatterParams = Object.assign({}, responseConfig[apiName], { serviceData: serviceResponse.data });
     formatterParams.entityKindToResponseKeyMap = Object.assign({}, formatterParams.entityKindToResponseKeyMap);
+
+    const entityKindToResponseKeyMap = formatterParams.entityKindToResponseKeyMap;
+    if (!serviceResponse.data.isLoggedIn) {
+      delete entityKindToResponseKeyMap[entityTypeConstants.userStats];
+    }
+
     const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
 
     serviceResponse.data = wrapperFormatterRsp.data;
