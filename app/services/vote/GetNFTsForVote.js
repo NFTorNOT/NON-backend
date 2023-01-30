@@ -306,8 +306,6 @@ class GetNFTsForVote extends ServiceBase {
   async _fetchReactionCounts() {
     const oThis = this;
 
-    oThis.currentUserId = 1;
-
     if (oThis.currentUserId) {
       const votedReactionCount = await new VoteModel().fetchCountforVotedReactionsForUser(oThis.currentUserId);
       const ignoredReactionCount = await new VoteModel().fetchCountforIgnoredReactionsForUser(oThis.currentUserId);
