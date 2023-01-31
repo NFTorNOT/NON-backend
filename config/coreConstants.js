@@ -123,7 +123,7 @@ class CoreConstants {
   }
 
   get MEMCACHED_SERVERS() {
-    return process.env.SERVERS;
+    return process.env.SERVERS.split(' ');
   }
 
   get MEMCACHED_DEFAULT_TTL() {
