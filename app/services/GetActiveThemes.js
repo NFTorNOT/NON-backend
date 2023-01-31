@@ -1,8 +1,8 @@
 const rootPrefix = '../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
-  ThemeModel = require(rootPrefix + '/app/models/mysql/main/Theme'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
+  entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType'),
+  fetchAllActiveThemesCache = require(rootPrefix + '/lib/cacheManagement/single/themes/ActiveThemes');
 
 /**
  * Class to get active themes
@@ -51,7 +51,13 @@ class GetActiveThemes extends ServiceBase {
   async _fetchThemes() {
     const oThis = this;
 
-    const themeResponse = await new ThemeModel().fetchAllActiveThemes();
+    let themeResponse = await new fetchAllActiveThemesCache().fetch();
+
+    if (themeResponse.isFailure()) {
+      return Promise.reject(themeResponse);
+    }
+
+    themeResponse = themeResponse.data;
 
     oThis.themeIds = themeResponse.themeIds;
     oThis.themes = themeResponse.themesMap;

@@ -62,12 +62,16 @@ class Theme extends ModelBase {
   async insertTheme(params) {
     const oThis = this;
 
-    return oThis
+    const insertedReponse = oThis
       .insert({
         name: params.name.toLowerCase(),
         status: themeConstants.invertedStatuses[params.status]
       })
       .fire();
+
+    await Theme.flushCache();
+
+    return insertedReponse;
   }
 
   /**
@@ -145,6 +149,21 @@ class Theme extends ModelBase {
       themeIds: themeIds,
       themesMap: themesMap
     };
+  }
+
+  /**
+   * Flush cache.
+   *
+   * @returns {Promise<*>}
+   */
+  static async flushCache() {
+    const promisesArray = [];
+
+    const fetchAllActiveThemesCache = require(rootPrefix + '/lib/cacheManagement/single/themes/ActiveThemes');
+
+    promisesArray.push(new fetchAllActiveThemesCache().clear());
+
+    await Promise.all(promisesArray);
   }
 }
 
