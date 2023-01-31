@@ -116,6 +116,23 @@ class CoreConstants {
   get INFURA_API_SECRET_KEY() {
     return process.env.INFURA_API_SECRET_KEY;
   }
+
+  // Memcached constans.
+  get MEMCACHED_ENGINE() {
+    return process.env.ENGINE;
+  }
+
+  get MEMCACHED_SERVERS() {
+    return process.env.SERVERS;
+  }
+
+  get MEMCACHED_DEFAULT_TTL() {
+    return process.env.DEFAULTTTL;
+  }
+
+  get MEMCACHED_CONSISTENT_BEHAVIOUR() {
+    return process.env.CONSISTENTBEHAVIOUR;
+  }
 }
 
 module.exports = new CoreConstants();
