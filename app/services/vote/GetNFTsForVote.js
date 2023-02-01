@@ -5,12 +5,12 @@ const rootPrefix = '../../..',
   TextModel = require(rootPrefix + '/app/models/mysql/main/Text'),
   VoteModel = require(rootPrefix + '/app/models/mysql/main/Vote'),
   ImageModel = require(rootPrefix + '/app/models/mysql/main/Image'),
-  ThemeModel = require(rootPrefix + '/app/models/mysql/main/Theme'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   basicHelper = require(rootPrefix + '/helpers/basic'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType'),
   paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination'),
-  fetchAllActiveThemesCache = require(rootPrefix + '/lib/cacheManagement/single/themes/ActiveThemes');
+  fetchAllActiveThemesCache = require(rootPrefix + '/lib/cacheManagement/single/themes/ActiveThemes'),
+  fetchThemesByIdsCache = require(rootPrefix + '/lib/cacheManagement/multi/themes/FetchThemeByIds');
 
 /**
  * Class to get nfts for vote.
@@ -272,10 +272,10 @@ class GetNFTsForVote extends ServiceBase {
     const oThis = this;
 
     oThis.themeIds = basicHelper.uniquate(oThis.themeIds);
-    // TODO: Fetch from new cache (by ids) @kartik.
-    const themeResponse = await new ThemeModel().fetchThemesByIds(oThis.themeIds);
 
-    oThis.themes = themeResponse;
+    const themeResponse = await new fetchThemesByIdsCache({ ids: oThis.themeIds }).fetch();
+
+    oThis.themes = themeResponse.data;
   }
 
   /**
