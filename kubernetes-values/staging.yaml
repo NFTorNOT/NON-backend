@@ -51,7 +51,6 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
 
-
 envSecrets:
   - envName: AWS_ACCESS_KEY_ID
     secretName: thursday-staging-api-user
