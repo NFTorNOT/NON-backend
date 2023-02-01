@@ -118,20 +118,16 @@ class CoreConstants {
   }
 
   // Memcached constans.
-  get MEMCACHED_ENGINE() {
-    return process.env.ENGINE;
-  }
-
   get MEMCACHED_SERVERS() {
-    return process.env.SERVERS.split(' ');
+    return process.env.NA_MEMCACHE_SERVERS.split(' ');
   }
 
   get MEMCACHED_DEFAULT_TTL() {
-    return process.env.DEFAULTTTL;
+    return process.env.NA_MEMCACHE_DEFAUL_TTTL;
   }
 
   get MEMCACHED_CONSISTENT_BEHAVIOUR() {
-    return process.env.CONSISTENTBEHAVIOUR;
+    return process.env.NA_MEMCACHE_CONSISTENT_BEHAVIOUR;
   }
 }
 
