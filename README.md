@@ -1,5 +1,5 @@
 # NFT or Not Backend
-This repository has implementation of NFT or NOT backend APIs and cron processes, developed using Node.js.
+This repository has implementation of NFT or NOT backend APIs developed using Node.js.
 
 ## Pre-requisites for environment setup
 
@@ -37,9 +37,6 @@ This repository has implementation of NFT or NOT backend APIs and cron processes
 ```sh
  > npm start
 ```
-
-## Start Cron Processes
-TODO
 
 ## Documentation
 TODO

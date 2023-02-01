@@ -327,8 +327,6 @@ class GetNFTsForVote extends ServiceBase {
       uts: Math.round(new Date() / 1000),
       totalImageCount: oThis.totalImageCount
     };
-
-    console.log('counts', oThis.totalImageCount, oThis.userStats);
   }
 
   /**
