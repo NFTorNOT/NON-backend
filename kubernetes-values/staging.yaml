@@ -89,7 +89,7 @@ envSecrets:
     secretName: non-staging-db
     secretKey: password
   - envName: NA_MEMCACHE_SERVERS 
-    secretName: whisperchain-staging-memcached
+    secretName: non-staging-memcached
     secretKey: endpoint
 
 awsSecrets:
