@@ -123,7 +123,7 @@ class CoreConstants {
   }
 
   get MEMCACHED_DEFAULT_TTL() {
-    return process.env.NA_MEMCACHE_DEFAUL_TTTL;
+    return process.env.NA_MEMCACHE_DEFAULT_TTL;
   }
 
   get MEMCACHED_CONSISTENT_BEHAVIOUR() {
