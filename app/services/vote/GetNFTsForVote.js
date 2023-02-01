@@ -9,7 +9,8 @@ const rootPrefix = '../../..',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   basicHelper = require(rootPrefix + '/helpers/basic'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType'),
-  paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination');
+  paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination'),
+  fetchAllActiveThemesCache = require(rootPrefix + '/lib/cacheManagement/single/themes/ActiveThemes');
 
 /**
  * Class to get nfts for vote.
@@ -271,7 +272,7 @@ class GetNFTsForVote extends ServiceBase {
     const oThis = this;
 
     oThis.themeIds = basicHelper.uniquate(oThis.themeIds);
-
+    // TODO: Fetch from new cache (by ids) @kartik.
     const themeResponse = await new ThemeModel().fetchThemesByIds(oThis.themeIds);
 
     oThis.themes = themeResponse;
@@ -288,11 +289,11 @@ class GetNFTsForVote extends ServiceBase {
   async _fetchActiveThemes() {
     const oThis = this;
 
-    const themeResponse = await new ThemeModel().fetchAllActiveThemes();
+    const themeResponse = await new fetchAllActiveThemesCache().fetch();
 
-    oThis.activeThemeIds = themeResponse.themeIds;
+    oThis.activeThemeIds = themeResponse.data.themeIds;
 
-    Object.assign(oThis.themes, themeResponse.themesMap);
+    Object.assign(oThis.themes, themeResponse.data.themesMap);
   }
 
   /**

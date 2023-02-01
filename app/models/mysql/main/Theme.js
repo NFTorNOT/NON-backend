@@ -54,27 +54,6 @@ class Theme extends ModelBase {
   }
 
   /**
-   * Insert into themes
-   * @param {object} params
-   * @param {string} params.name,
-   * @param {string} params.status,
-   */
-  async insertTheme(params) {
-    const oThis = this;
-
-    const insertedReponse = oThis
-      .insert({
-        name: params.name.toLowerCase(),
-        status: themeConstants.invertedStatuses[params.status]
-      })
-      .fire();
-
-    await Theme.flushCache();
-
-    return insertedReponse;
-  }
-
-  /**
    * Fetch themes for given ids
    *
    * @param {array} ids: theme ids

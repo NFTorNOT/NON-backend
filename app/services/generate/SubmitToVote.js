@@ -129,6 +129,7 @@ class SubmitToVote extends ServiceBase {
    */
   async _validateTheme() {
     const oThis = this;
+    // TODO: Fetch from new cache (by name) @kartik.
     const qryResponse = await new ThemeModel().fetchActiveThemeByThemeName(oThis.themeName);
 
     if (CommonValidators.isVarNullOrUndefined(qryResponse)) {
