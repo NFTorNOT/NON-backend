@@ -69,5 +69,5 @@ jobs:
           --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY \
           --set image.tag=${IMAGE_TAG} \
           --namespace non \
-          --values ./kubernetes-values/new-staging.yaml \
+          --values ./kubernetes-values/staging.yaml \
           nftornot-backend ./helm

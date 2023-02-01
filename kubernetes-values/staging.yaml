@@ -32,7 +32,7 @@ ingress:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/healthcheck-path: /health-checker
   hosts:
-    - host: nftornot.quick-poc.com
+    - host: staging.nftornot.com
       paths:
         - path: /api
           pathType: Prefix
@@ -51,6 +51,59 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
 
+env:
+  NA_ENVIRONMENT: 'staging'
+  NA_PORT: '5000'
+  NA_DEFAULT_LOG_LEVEL: 'debug'
+  NON_API_DOMAIN: 'http://staging.nftornot.com'
+  NA_COOKIE_DOMAIN: 'staging.nftornot.com'
+  NA_DEVOPS_APP_NAME: 'non-api'
+  NA_DEVOPS_ENV_ID: 'dev1-sandbox'
+  NA_DEVOPS_IP_ADDRESS: '127.0.0.1'
+  NA_DEVOPS_SERVER_IDENTIFIER: '123456'
+  NA_MYSQL_CONNECTION_POOL_SIZE: '3'
+  NA_DB_SUFFIX: 'staging'
+  S3_BUCKET: 'non-staging-statc-files'
+  S3_AWS_REGION: 'us-east-2'
+  S3_URL_PREFIX: ''
+  S3_AWS_MASTER_FOLDER: ''
+  NA_CDN_URL: ''
+  NA_MEMCACHE_DEFAUL_TTTL: 36000
+  NA_MEMCACHE_CONSISTENT_BEHAVIOUR: '1'
+
+
 envSecrets:
-  AWS_ACCESS_KEY_ID: plg-user
-  AWS_SECRET_ACCESS_KEY: plg-user
+  - envName: AWS_ACCESS_KEY_ID
+    secretName: thursday-staging-api-user
+    secretKey: AWS_ACCESS_KEY_ID
+  - envName: AWS_SECRET_ACCESS_KEY
+    secretName: thursday-staging-api-user
+    secretKey: AWS_SECRET_ACCESS_KEY
+  - envName: NA_MAIN_DB_MYSQL_HOST
+    secretName: non-staging-db
+    secretKey: host
+  - envName: NA_MAIN_DB_MYSQL_USER
+    secretName: non-staging-db
+    secretKey: username
+  - envName: NA_MAIN_DB_MYSQL_PASSWORD
+    secretName: non-staging-db
+    secretKey: password
+  - envName: NA_MEMCACHE_SERVERS 
+    secretName: whisperchain-staging-memcached
+    secretKey: endpoint
+
+awsSecrets:
+  non-staging-api:
+    - NA_COOKIE_SECRET
+    - NA_ENCRYPTION_KEY
+    - API_COOKIE_ENCRYPTION_SALT
+    - PROFILE_ID
+    - LENS_TESTNET_URL
+    - ALCHEMY_ENDPOINT
+    - STABILITY_KEY
+    - WALLET_ADDRESS
+    - WALLET_PK
+    - SIGNER_PK
+    - INFURA_PROJECT_ID
+    - INFURA_API_SECRET_KEY
+    - WEB3_STORAGE_IPFS_TOKEN
