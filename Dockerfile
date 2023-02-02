@@ -24,7 +24,6 @@ RUN apt update && apt install -y awscli memcached
 RUN apt-get update && apt-get install telnet
 
 
-
 COPY . .
 
 EXPOSE 5000
