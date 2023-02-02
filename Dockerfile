@@ -20,7 +20,8 @@ RUN npm install
 # If you are building your code for production
 # RUN npm ci --only=production
 # Bundle app source
-RUN apt update && apt install -y awscli memcached telnetd 
+RUN apt update && apt install -y awscli memcached 
+RUN apt-get update && apt-get install telnet
 
 
 
