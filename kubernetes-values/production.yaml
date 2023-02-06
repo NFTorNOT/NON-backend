@@ -1,0 +1,71 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "non-backend"
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 5000
+
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    - hosts:
+      - nftornot.com
+      secretName: nftornot.com
+  hosts:
+    - host: nftornot.com
+      paths:
+        - path: /api
+          pathType: Prefix
+
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+# envSecrets:
+#   - envName: AWS_ACCESS_KEY_ID
+#     secretName: thursday-staging-api-user
+#     secretKey: AWS_ACCESS_KEY_ID
+#   - envName: AWS_SECRET_ACCESS_KEY
+#     secretName: thursday-staging-api-user
+#     secretKey: AWS_SECRET_ACCESS_KEY
+#   - envName: NA_MAIN_DB_MYSQL_HOST
+#     secretName: non-staging-db
+#     secretKey: host
+#   - envName: NA_MAIN_DB_MYSQL_USER
+#     secretName: non-staging-db
+#     secretKey: username
+#   - envName: NA_MAIN_DB_MYSQL_PASSWORD
+#     secretName: non-staging-db
+#     secretKey: password
+#   - envName: NA_MEMCACHE_SERVERS 
+#     secretName: non-staging-memcached
+#     secretKey: endpoint
