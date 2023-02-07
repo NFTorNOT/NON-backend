@@ -102,19 +102,6 @@ class Image extends ModelBase {
       })
       .fire();
   }
-
-  /**
-   * Fetch images for given ids
-   *
-   * @returns {object}
-   */
-  async fetchTotalImagesCount() {
-    const oThis = this;
-
-    const dbRows = await oThis.select('*').fire();
-
-    return dbRows.length;
-  }
 }
 
 module.exports = Image;

@@ -241,6 +241,19 @@ class LensPost extends ModelBase {
 
     return response;
   }
+
+  /**
+   * Fetch images for given ids
+   *
+   * @returns {object}
+   */
+  async fetchTotalPostsCount() {
+    const oThis = this;
+
+    const dbRows = await oThis.select('*').fire();
+
+    return dbRows.length;
+  }
 }
 
 module.exports = LensPost;

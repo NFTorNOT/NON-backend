@@ -61,7 +61,7 @@ class GetNFTsForVote extends ServiceBase {
     oThis.limit = 10;
 
     oThis.userStats = {};
-    oThis.totalImageCount = null;
+    oThis.totalPostsCount = null;
     oThis.stats = {};
   }
 
@@ -320,12 +320,12 @@ class GetNFTsForVote extends ServiceBase {
         noReactionsCount: noReactionCount
       };
     }
-    oThis.totalImageCount = await new ImageModel().fetchTotalImagesCount();
+    oThis.totalPostsCount = await new LensPostModel().fetchTotalPostsCount();
 
     oThis.stats = {
       id: oThis.currentUserId || 0,
       uts: Math.round(new Date() / 1000),
-      totalImageCount: oThis.totalImageCount
+      totalPostsCount: oThis.totalPostsCount
     };
   }
 
