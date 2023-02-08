@@ -56,7 +56,7 @@ jobs:
         URL: "us-west1-docker.pkg.dev/plg-web3/nftornot/non-backend"
         TAG: ${{ github.run_id }}-${{ github.run_attempt }}
       run: |-
-        mv secrets/backend.prod.env prod.env 
+        mv secrets/backend.prod.env .env 
         docker build --tag "$URL:$TAG" --build-arg ENV="$ENV" .
         gcloud auth configure-docker us-west1-docker.pkg.dev --quiet --project plg-web3
         docker push "$URL:$TAG"
