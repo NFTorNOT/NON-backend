@@ -52,7 +52,7 @@ jobs:
           IMAGE_TAG:  ${{ github.run_id }}-${{ github.run_attempt }}
           ENV: ${{ secrets.STAGING_ENV_VARS }}
         run: |
-          mv secrets/backend.staging.env staging.env 
+          mv secrets/backend.staging.env .env 
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG  --build-arg ENV="$ENV" .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
