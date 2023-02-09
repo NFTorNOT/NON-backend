@@ -102,6 +102,26 @@ class Image extends ModelBase {
       })
       .fire();
   }
+
+  /**
+   * Update Image Urls.
+   *
+   * @param {object} params
+   * @param {number} params.id
+   * @param {string} params.url
+   *
+   * @returns {Promise<Array>}
+   */
+  async updateImageUrlById(params) {
+    const oThis = this;
+
+    return oThis
+      .update({
+        shortened_url: params.url
+      })
+      .where({ id: params.id })
+      .fire();
+  }
 }
 
 module.exports = Image;
