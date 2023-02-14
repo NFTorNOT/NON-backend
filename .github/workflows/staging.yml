@@ -21,13 +21,19 @@ jobs:
         with:
           ref: ${{ github.event.inputs.branch }}
 
-          
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.THURSDAY_STAGING_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.THURSDAY_STAGING_SECRET_KEY }}
           aws-region: us-east-2
+      
+      - uses: actions/checkout@v2
+        with:
+          repository: "NFTorNOT/dev.secrets"
+          ref: "master"
+          token: ${{ secrets.PAT }}
+          path: "secrets"
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -46,6 +52,7 @@ jobs:
           IMAGE_TAG:  ${{ github.run_id }}-${{ github.run_attempt }}
           ENV: ${{ secrets.STAGING_ENV_VARS }}
         run: |
+          mv secrets/backend.staging.env .env 
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG  --build-arg ENV="$ENV" .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
@@ -69,5 +76,5 @@ jobs:
           --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY \
           --set image.tag=${IMAGE_TAG} \
           --namespace non \
-          --values ./kubernetes-values/new-staging.yaml \
+          --values ./kubernetes-values/staging.yaml \
           nftornot-backend ./helm
