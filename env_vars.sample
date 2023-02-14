@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Core ENV Details.
+export A_ENVIRONMENT=
+export A_PORT=
+export A_DEFAULT_LOG_LEVEL=
+export API_DOMAIN=
+export A_COOKIE_DOMAIN=
+
+# cookie signing secret for web cookie
+export A_W_COOKIE_SECRET=
+
+# cookie signing secret for mobile cookie
+export A_V1_COOKIE_SECRET=
+
+export A_COOKIE_TOKEN_SECRET=
+
+# Devops error logs framework.
+export A_DEVOPS_APP_NAME=
+export A_DEVOPS_ENV_ID=
+export A_DEVOPS_IP_ADDRESS=
+
+# Devops websocket server identifier.
+export A_DEVOPS_SERVER_IDENTIFIER=
+
+# Database details.
+export A_MYSQL_CONNECTION_POOL_SIZE=
+
+export A_DB_SUFFIX=
+
+# Mysql main db.
+export A_MAIN_DB_MYSQL_HOST=
+export A_MAIN_DB_MYSQL_USER=
+export A_MAIN_DB_MYSQL_PASSWORD=
+
+export A_MAIN_DB_MYSQL_HOST_SLAVE=
+export A_MAIN_DB_MYSQL_USER_SLAVE=
+export A_MAIN_DB_MYSQL_PASSWORD_SLAVE=
+
+# mysql config db
+export A_CONFIG_DB_MYSQL_HOST=
+export A_CONFIG_DB_MYSQL_USER=
+export A_CONFIG_DB_MYSQL_PASSWORD=
+
+# mysql big db
+export A_BIG_DB_MYSQL_HOST=
+export A_BIG_DB_MYSQL_USER=
+export A_BIG_DB_MYSQL_PASSWORD=
+
+# mysql user db
+export A_USER_DB_MYSQL_HOST=
+export A_USER_DB_MYSQL_USER=
+export A_USER_DB_MYSQL_PASSWORD=
+
+# App support variables
+export API_MIN_SUPPORTED_BUILD_NUMBER=
+export API_MAX_DEPRECATED_BUILD_NUMBER=
+
+# New Env vars
+export A_CONFIG_STRATEGY_SALT=
+export A_ENCRYPTION_KEY=

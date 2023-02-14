@@ -1,49 +1,45 @@
-# NFTorNot-backend
+# NFT or Not Backend
+This repository has implementation of NFT or NOT backend APIs and cron processes, developed using Node.js.
 
-## Pre-requisites for setting up environment
+## Pre-requisites for environment setup
 
-* Start [MySQL](https://www.mysql.com/downloads/)
-```bash
-  mysql.server start
+* Install [Node.js](https://nodejs.org/en/download/) - currently the latest LTS version is 18 and we encourage installing the same.
+
+* Set proper values of env vars mentioned in ./env_vars.sample file
+
+* Install and start [MySQL](https://www.mysql.com/downloads/). Create the user with the credentials mentioned in env vars, so that code can interact with the DB.
+```sh
+ > mysql.server start
 ```
 
-## Install all the dependency npm packages
+* Create the main db and create schema_migrations table using the following command.
+```sh
+ > source set_env_vars.sh
 
-```bash
-rm -rf node_modules
-rm -rf package-lock.json
-npm install
+ > node db/seed.js
 ```
 
-## Seed DB
-
-* Create the main db and create schema_migrations table.
-
-```bash
-source set_env_vars.sh
-
-node db/seed.js
-
+## Start Server
+* Install required NPM dependencies
+```sh
+ > rm -rf node_modules
+ > rm -rf package-lock.json
+ > npm install
 ```
 
-## Run DB Migrations
-
-* Run all pending migrations.
-
-```bash
-node db/migrate.js
+* Running all pending migrations.
+```sh
+ > source set_env_vars.sh
+ > node db/migrate.js
 ```
 
-## Helper commands
-
-* Generate API documentation
-```bash
-  npm run generate-openapi-docs
+* Start the server
+```sh
+ > npm start
 ```
 
-## Start API server
-* Start web-socket server.
-```bash
-  source set_env_vars.sh
-  npm start
-```
+## Start Cron Processes
+TODO
+
+## Documentation
+TODO
