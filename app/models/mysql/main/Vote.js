@@ -134,57 +134,18 @@ class Vote extends ModelBase {
   }
 
   /**
-   * Fetch count for voted reactions.
+   * Fetch count for recations
    *
-   * @param {array} voterUserId: voterUserId
-   *
-   * @returns {object}
+   * @param {string} voterUserId: UserId
+   * @param {string} reactionType: Type of rection ie. Voted, Ignored, No Reaction
    */
-  async fetchCountforVotedReactionsForUser(voterUserId) {
+  async fetchCountReactionsForUser(voterUserId, reactionType) {
     const oThis = this;
 
     const dbRows = await oThis
       .select('*')
       .where(['voter_user_id = ?', voterUserId])
-      .where(['status = ?', voteConstants.invertedStatuses[voteConstants.votedStatus]])
-      .fire();
-
-    return dbRows.length;
-  }
-
-  /**
-   * Fetch count for ignored reactions.
-   *
-   * @param {array} voterUserId: voterUserId
-   *
-   * @returns {object}
-   */
-  async fetchCountforIgnoredReactionsForUser(voterUserId) {
-    const oThis = this;
-
-    const dbRows = await oThis
-      .select('*')
-      .where(['voter_user_id = ?', voterUserId])
-      .where(['status = ?', voteConstants.invertedStatuses[voteConstants.ignoredStatus]])
-      .fire();
-
-    return dbRows.length;
-  }
-
-  /**
-   * Fetch count for no reactions.
-   *
-   * @param {array} voterUserId: voterUserId
-   *
-   * @returns {object}
-   */
-  async fetchCountforNoReactionsForUser(voterUserId) {
-    const oThis = this;
-
-    const dbRows = await oThis
-      .select('*')
-      .where(['voter_user_id = ?', voterUserId])
-      .where(['status = ?', voteConstants.invertedStatuses[voteConstants.noReactionStatus]])
+      .where(['status = ?', voteConstants.invertedStatuses[reactionType]])
       .fire();
 
     return dbRows.length;

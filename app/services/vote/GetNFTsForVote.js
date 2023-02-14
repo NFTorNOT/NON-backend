@@ -9,7 +9,8 @@ const rootPrefix = '../../..',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   basicHelper = require(rootPrefix + '/helpers/basic'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType'),
-  paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination');
+  paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination'),
+  voteConstants = require(rootPrefix + '/lib/globalConstant/entity/vote');
 
 /**
  * Class to get nfts for vote.
@@ -307,17 +308,27 @@ class GetNFTsForVote extends ServiceBase {
     const oThis = this;
 
     if (oThis.currentUserId) {
-      // TODO - following 3 queries can be done in parallel.
-      const votedReactionCount = await new VoteModel().fetchCountforVotedReactionsForUser(oThis.currentUserId);
-      const ignoredReactionCount = await new VoteModel().fetchCountforIgnoredReactionsForUser(oThis.currentUserId);
-      const noReactionCount = await new VoteModel().fetchCountforNoReactionsForUser(oThis.currentUserId);
+      const votedReactionCount1 = new VoteModel().fetchCountReactionsForUser(
+        oThis.currentUserId,
+        voteConstants.votedStatus
+      );
+      const ignoredReactionCount1 = new VoteModel().fetchCountReactionsForUser(
+        oThis.currentUserId,
+        voteConstants.ignoredStatus
+      );
+      const noReactionCount1 = new VoteModel().fetchCountReactionsForUser(
+        oThis.currentUserId,
+        voteConstants.noReactionStatus
+      );
+
+      const responseReaction = await Promise.all([votedReactionCount1, ignoredReactionCount1, noReactionCount1]);
 
       oThis.userStats = {
         id: oThis.currentUserId,
         uts: Math.round(new Date() / 1000),
-        votedCount: votedReactionCount,
-        ignoredCount: ignoredReactionCount,
-        noReactionsCount: noReactionCount
+        votedCount: responseReaction[0],
+        ignoredCount: responseReaction[1],
+        noReactionsCount: responseReaction[2]
       };
     }
     oThis.totalLensPostsCount = await new LensPostModel().fetchTotalPostsCount();
