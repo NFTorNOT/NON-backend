@@ -134,6 +134,63 @@ class Vote extends ModelBase {
   }
 
   /**
+   * Fetch count for voted reactions.
+   *
+   * @param {array} voterUserId: voterUserId
+   *
+   * @returns {object}
+   */
+  async fetchCountforVotedReactionsForUser(voterUserId) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('*')
+      .where(['voter_user_id = ?', voterUserId])
+      .where(['status = ?', voteConstants.invertedStatuses[voteConstants.votedStatus]])
+      .fire();
+
+    return dbRows.length;
+  }
+
+  /**
+   * Fetch count for ignored reactions.
+   *
+   * @param {array} voterUserId: voterUserId
+   *
+   * @returns {object}
+   */
+  async fetchCountforIgnoredReactionsForUser(voterUserId) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('*')
+      .where(['voter_user_id = ?', voterUserId])
+      .where(['status = ?', voteConstants.invertedStatuses[voteConstants.ignoredStatus]])
+      .fire();
+
+    return dbRows.length;
+  }
+
+  /**
+   * Fetch count for no reactions.
+   *
+   * @param {array} voterUserId: voterUserId
+   *
+   * @returns {object}
+   */
+  async fetchCountforNoReactionsForUser(voterUserId) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('*')
+      .where(['voter_user_id = ?', voterUserId])
+      .where(['status = ?', voteConstants.invertedStatuses[voteConstants.noReactionStatus]])
+      .fire();
+
+    return dbRows.length;
+  }
+
+  /**
    * Fetch reactions for user for given lens posts ids
    *
    * @param {object} params

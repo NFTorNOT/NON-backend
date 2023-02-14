@@ -58,6 +58,10 @@ class GetNFTsForVote extends ServiceBase {
     oThis.activeThemeIds = [];
 
     oThis.limit = 10;
+
+    oThis.userStats = {};
+    oThis.totalLensPostsCount = null;
+    oThis.stats = {};
   }
 
   /**
@@ -78,6 +82,8 @@ class GetNFTsForVote extends ServiceBase {
     await oThis._fetchRelatedEntities();
 
     await oThis._fetchActiveThemes();
+
+    await oThis._fetchReactionCounts();
 
     oThis._addResponseMetaData();
 
@@ -290,6 +296,39 @@ class GetNFTsForVote extends ServiceBase {
   }
 
   /**
+   * Fetch vote counts.
+   *
+   * @sets oThis.userStats, oThis.stats
+   *
+   * @returns {Promise<void>}
+   * @private
+   */
+  async _fetchReactionCounts() {
+    const oThis = this;
+
+    if (oThis.currentUserId) {
+      const votedReactionCount = await new VoteModel().fetchCountforVotedReactionsForUser(oThis.currentUserId);
+      const ignoredReactionCount = await new VoteModel().fetchCountforIgnoredReactionsForUser(oThis.currentUserId);
+      const noReactionCount = await new VoteModel().fetchCountforNoReactionsForUser(oThis.currentUserId);
+
+      oThis.userStats = {
+        id: oThis.currentUserId,
+        uts: Math.round(new Date() / 1000),
+        votedCount: votedReactionCount,
+        ignoredCount: ignoredReactionCount,
+        noReactionsCount: noReactionCount
+      };
+    }
+    oThis.totalLensPostsCount = await new LensPostModel().fetchTotalPostsCount();
+
+    oThis.stats = {
+      id: oThis.currentUserId || 0,
+      uts: Math.round(new Date() / 1000),
+      totalPostsCount: oThis.totalLensPostsCount
+    };
+  }
+
+  /**
    * Add next page meta data.
    *
    * @sets oThis.responseMetaData
@@ -330,6 +369,9 @@ class GetNFTsForVote extends ServiceBase {
       [entityTypeConstants.themesMap]: oThis.themes,
       [entityTypeConstants.usersMap]: oThis.users,
       [entityTypeConstants.activeThemeIds]: oThis.activeThemeIds,
+      [entityTypeConstants.stats]: oThis.stats,
+      [entityTypeConstants.userStats]: oThis.currentUserId ? oThis.userStats : null,
+      isLoggedIn: oThis.currentUserId,
       meta: oThis.responseMetaData
     });
   }
