@@ -307,6 +307,7 @@ class GetNFTsForVote extends ServiceBase {
     const oThis = this;
 
     if (oThis.currentUserId) {
+      // TODO - following 3 queries can be done in parallel.
       const votedReactionCount = await new VoteModel().fetchCountforVotedReactionsForUser(oThis.currentUserId);
       const ignoredReactionCount = await new VoteModel().fetchCountforIgnoredReactionsForUser(oThis.currentUserId);
       const noReactionCount = await new VoteModel().fetchCountforNoReactionsForUser(oThis.currentUserId);
