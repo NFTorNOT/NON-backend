@@ -33,7 +33,7 @@ class GetNFTsForVote extends ServiceBase {
     const oThis = this;
 
     oThis.currentUser = params.current_user || {};
-    oThis.currentUserId = 1; //oThis.currentUser.id || null;
+    oThis.currentUserId = oThis.currentUser.id || null;
 
     oThis.paginationIdentifier = params[paginationConstants.paginationIdentifierKey] || null;
 
