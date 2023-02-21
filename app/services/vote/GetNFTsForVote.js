@@ -306,22 +306,23 @@ class GetNFTsForVote extends ServiceBase {
    */
   async _fetchReactionCounts() {
     const oThis = this;
+    const responseReaction=[];
 
     if (oThis.currentUserId) {
-      const votedReactionCount1 = new VoteModel().fetchCountReactionsForUser(
+      responseReaction.push(new VoteModel().fetchCountReactionsForUser(
         oThis.currentUserId,
         voteConstants.votedStatus
-      );
-      const ignoredReactionCount1 = new VoteModel().fetchCountReactionsForUser(
+      ));
+      responseReaction.push(new VoteModel().fetchCountReactionsForUser(
         oThis.currentUserId,
         voteConstants.ignoredStatus
-      );
-      const noReactionCount1 = new VoteModel().fetchCountReactionsForUser(
+      ));
+      responseReaction.push(new VoteModel().fetchCountReactionsForUser(
         oThis.currentUserId,
         voteConstants.noReactionStatus
-      );
+      ));
 
-      const responseReaction = await Promise.all([votedReactionCount1, ignoredReactionCount1, noReactionCount1]);
+      await Promise.all(responseReaction);
 
       oThis.userStats = {
         id: oThis.currentUserId,
