@@ -33,7 +33,7 @@ class GetNFTsForVote extends ServiceBase {
     const oThis = this;
 
     oThis.currentUser = params.current_user || {};
-    oThis.currentUserId = oThis.currentUser.id || null;
+    oThis.currentUserId = 1; //oThis.currentUser.id || null;
 
     oThis.paginationIdentifier = params[paginationConstants.paginationIdentifierKey] || null;
 
@@ -306,30 +306,25 @@ class GetNFTsForVote extends ServiceBase {
    */
   async _fetchReactionCounts() {
     const oThis = this;
-    const responseReaction=[];
+    const responseReaction = [];
 
     if (oThis.currentUserId) {
-      responseReaction.push(new VoteModel().fetchCountReactionsForUser(
-        oThis.currentUserId,
-        voteConstants.votedStatus
-      ));
-      responseReaction.push(new VoteModel().fetchCountReactionsForUser(
-        oThis.currentUserId,
-        voteConstants.ignoredStatus
-      ));
-      responseReaction.push(new VoteModel().fetchCountReactionsForUser(
-        oThis.currentUserId,
-        voteConstants.noReactionStatus
-      ));
+      responseReaction.push(new VoteModel().fetchCountReactionsForUser(oThis.currentUserId, voteConstants.votedStatus));
+      responseReaction.push(
+        new VoteModel().fetchCountReactionsForUser(oThis.currentUserId, voteConstants.ignoredStatus)
+      );
+      responseReaction.push(
+        new VoteModel().fetchCountReactionsForUser(oThis.currentUserId, voteConstants.noReactionStatus)
+      );
 
-      await Promise.all(responseReaction);
+      const resolvedPromises = await Promise.all(responseReaction);
 
       oThis.userStats = {
         id: oThis.currentUserId,
         uts: Math.round(new Date() / 1000),
-        votedCount: responseReaction[0],
-        ignoredCount: responseReaction[1],
-        noReactionsCount: responseReaction[2]
+        votedCount: resolvedPromises[0],
+        ignoredCount: resolvedPromises[1],
+        noReactionsCount: resolvedPromises[2]
       };
     }
     oThis.totalLensPostsCount = await new LensPostModel().fetchTotalPostsCount();
@@ -391,3 +386,5 @@ class GetNFTsForVote extends ServiceBase {
 }
 
 module.exports = GetNFTsForVote;
+
+// new GetNFTsForVote();
