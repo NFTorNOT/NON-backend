@@ -9,7 +9,8 @@ const rootPrefix = '../../..',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   basicHelper = require(rootPrefix + '/helpers/basic'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType'),
-  paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination');
+  paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination'),
+  voteConstants = require(rootPrefix + '/lib/globalConstant/entity/vote');
 
 /**
  * Class to get nfts for vote.
@@ -58,6 +59,10 @@ class GetNFTsForVote extends ServiceBase {
     oThis.activeThemeIds = [];
 
     oThis.limit = 10;
+
+    oThis.userStats = {};
+    oThis.totalLensPostsCount = null;
+    oThis.stats = {};
   }
 
   /**
@@ -78,6 +83,8 @@ class GetNFTsForVote extends ServiceBase {
     await oThis._fetchRelatedEntities();
 
     await oThis._fetchActiveThemes();
+
+    await oThis._fetchReactionCounts();
 
     oThis._addResponseMetaData();
 
@@ -290,6 +297,46 @@ class GetNFTsForVote extends ServiceBase {
   }
 
   /**
+   * Fetch vote counts.
+   *
+   * @sets oThis.userStats, oThis.stats
+   *
+   * @returns {Promise<void>}
+   * @private
+   */
+  async _fetchReactionCounts() {
+    const oThis = this;
+    const responseReaction = [];
+
+    if (oThis.currentUserId) {
+      responseReaction.push(new VoteModel().fetchCountReactionsForUser(oThis.currentUserId, voteConstants.votedStatus));
+      responseReaction.push(
+        new VoteModel().fetchCountReactionsForUser(oThis.currentUserId, voteConstants.ignoredStatus)
+      );
+      responseReaction.push(
+        new VoteModel().fetchCountReactionsForUser(oThis.currentUserId, voteConstants.noReactionStatus)
+      );
+
+      const resolvedPromises = await Promise.all(responseReaction);
+
+      oThis.userStats = {
+        id: oThis.currentUserId,
+        uts: Math.round(new Date() / 1000),
+        votedCount: resolvedPromises[0],
+        ignoredCount: resolvedPromises[1],
+        noReactionsCount: resolvedPromises[2]
+      };
+    }
+    oThis.totalLensPostsCount = await new LensPostModel().fetchTotalPostsCount();
+
+    oThis.stats = {
+      id: oThis.currentUserId || 0,
+      uts: Math.round(new Date() / 1000),
+      totalPostsCount: oThis.totalLensPostsCount
+    };
+  }
+
+  /**
    * Add next page meta data.
    *
    * @sets oThis.responseMetaData
@@ -330,9 +377,14 @@ class GetNFTsForVote extends ServiceBase {
       [entityTypeConstants.themesMap]: oThis.themes,
       [entityTypeConstants.usersMap]: oThis.users,
       [entityTypeConstants.activeThemeIds]: oThis.activeThemeIds,
+      [entityTypeConstants.stats]: oThis.stats,
+      [entityTypeConstants.userStats]: oThis.currentUserId ? oThis.userStats : null,
+      isLoggedIn: oThis.currentUserId,
       meta: oThis.responseMetaData
     });
   }
 }
 
 module.exports = GetNFTsForVote;
+
+// new GetNFTsForVote();

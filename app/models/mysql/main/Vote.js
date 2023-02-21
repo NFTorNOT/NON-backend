@@ -134,6 +134,24 @@ class Vote extends ModelBase {
   }
 
   /**
+   * Fetch count for recations
+   *
+   * @param {string} voterUserId: UserId
+   * @param {string} reactionType: Type of rection ie. Voted, Ignored, No Reaction
+   */
+  async fetchCountReactionsForUser(voterUserId, reactionType) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('*')
+      .where(['voter_user_id = ?', voterUserId])
+      .where(['status = ?', voteConstants.invertedStatuses[reactionType]])
+      .fire();
+
+    return dbRows.length;
+  }
+
+  /**
    * Fetch reactions for user for given lens posts ids
    *
    * @param {object} params

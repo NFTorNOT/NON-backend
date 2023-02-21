@@ -105,6 +105,10 @@ class CoreConstants {
     return process.env.S3_SECRET_ACCESS_KEY;
   }
 
+  get NA_CDN_URL() {
+    return process.env.NA_CDN_URL;
+  }
+
   get WEB3_STORAGE_IPFS_TOKEN() {
     return process.env.WEB3_STORAGE_IPFS_TOKEN;
   }

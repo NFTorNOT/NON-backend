@@ -118,5 +118,10 @@
     "http_code": "200",
     "code": "BAD_REQUEST",
     "message": "You have not upvoted this lens post."
+  },
+    "invalid_prompts_detected":{
+    "http_code": "200",
+    "code": "BAD_REQUEST",
+    "message": "AI generation of images failed for the prompt provided. Please try to describe the image you want to generate using different wording for the prompt."
   }
 }
