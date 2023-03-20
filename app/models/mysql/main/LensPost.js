@@ -273,6 +273,7 @@ class LensPost extends ModelBase {
       .select('id')
       .where({ status: lensPostConstants.invertedStatuses[lensPostConstants.activeStatus] })
       .where({ curated_image: lensPostConstants.invertedCuratedStatuses[lensPostConstants.curatedStatus] })
+      .order_by('RAND()')
       .limit(params.limit);
 
     const dbRows = await queryObj.fire();
