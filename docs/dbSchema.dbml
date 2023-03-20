@@ -44,6 +44,11 @@ Table lens_posts {
     1 = ACTIVE,
     2 = INACTIVE
     ']
+  curated_images tinyint [
+    note: '
+    0 = FALSE
+    1 = TRUE,
+    ']
   created_at timestamp
   updated_at timestamp
   indexes {
