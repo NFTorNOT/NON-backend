@@ -123,12 +123,12 @@ class GetNFTsForVote extends ServiceBase {
         paginationDatabaseId: oThis.paginationDatabaseId
       });
     } else {
-      lensPostsPaginationIds = await new LensPostModel().fetchCuratedPosts({
+      lensPostsPaginationIds = await new LensPostModel().fetchRandomCuratedPostIds({
         limit: 10
       });
     }
     const lensPostIds = lensPostsPaginationIds.lensPostIds || [],
-      nextPageDatabaseId = lensPostsPaginationIds.nextPageDatabaseId;
+      nextPageDatabaseId = lensPostsPaginationIds.nextPageDatabaseId || 0;
 
     console.log('lensPostsPaginationIds ----- ', lensPostsPaginationIds);
 
@@ -393,5 +393,3 @@ class GetNFTsForVote extends ServiceBase {
 }
 
 module.exports = GetNFTsForVote;
-
-// new GetNFTsForVote();

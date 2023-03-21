@@ -41,7 +41,7 @@ class LensPost extends ModelBase {
    * @param {number} dbRow.ipfs_object_id
    * @param {number} dbRow.total_votes
    * @param {number} dbRow.status
-   * @param {number} dbRow.curated_image
+   * @param {number} dbRow.curated_status
    * @param {string} dbRow.created_at
    * @param {string} dbRow.updated_at
    *
@@ -63,7 +63,7 @@ class LensPost extends ModelBase {
       ipfsObjectId: dbRow.ipfs_object_id,
       totalVotes: dbRow.total_votes,
       status: lensPostConstants.statuses[dbRow.status],
-      curatedImage: lensPostConstants.curatedStatuses[dbRow.curated_image],
+      curatedStatus: lensPostConstants.curatedStatuses[dbRow.curated_status],
       createdAt: dbRow.created_at,
       updatedAt: dbRow.updated_at
     };
@@ -262,17 +262,15 @@ class LensPost extends ModelBase {
    *
    * @returns {object}
    */
-  async fetchCuratedPosts(params) {
+  async fetchRandomCuratedPostIds(params) {
     const oThis = this;
 
     const lensPostIds = [];
 
-    let nextPageDatabaseId = null;
-
     const queryObj = oThis
       .select('id')
       .where({ status: lensPostConstants.invertedStatuses[lensPostConstants.activeStatus] })
-      .where({ curated_image: lensPostConstants.invertedCuratedStatuses[lensPostConstants.curatedStatus] })
+      .where({ curated_status: lensPostConstants.invertedCuratedStatuses[lensPostConstants.curatedStatus] })
       .order_by('RAND()')
       .limit(params.limit);
 
@@ -280,12 +278,10 @@ class LensPost extends ModelBase {
 
     for (let index = 0; index < dbRows.length; index++) {
       lensPostIds.push(dbRows[index].id);
-      nextPageDatabaseId = dbRows[index].id;
     }
 
     return {
-      lensPostIds: lensPostIds,
-      nextPageDatabaseId: nextPageDatabaseId
+      lensPostIds: lensPostIds
     };
   }
 }

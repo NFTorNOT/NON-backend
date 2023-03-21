@@ -44,10 +44,10 @@ Table lens_posts {
     1 = ACTIVE,
     2 = INACTIVE
     ']
-  curated_images tinyint [
+  curated_status tinyint [
     note: '
-    0 = FALSE
-    1 = TRUE,
+    0 = UNCURATED,
+    1 = CURATED
     ']
   created_at timestamp
   updated_at timestamp
