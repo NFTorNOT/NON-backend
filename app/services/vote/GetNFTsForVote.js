@@ -115,13 +115,20 @@ class GetNFTsForVote extends ServiceBase {
    */
   async _fetchLensPosts() {
     const oThis = this;
+    let lensPostsPaginationIds;
 
-    const lensPostsPaginationIds = await new LensPostModel().fetchAllActiveLensPostsWithPagination({
+    if (oThis.currentUserId) {
+      lensPostsPaginationIds = await new LensPostModel().fetchAllActiveLensPostsWithPagination({
         limit: oThis.limit,
         paginationDatabaseId: oThis.paginationDatabaseId
-      }),
-      lensPostIds = lensPostsPaginationIds.lensPostIds || [],
-      nextPageDatabaseId = lensPostsPaginationIds.nextPageDatabaseId;
+      });
+    } else {
+      lensPostsPaginationIds = await new LensPostModel().fetchRandomCuratedPostIds({
+        limit: 10
+      });
+    }
+    const lensPostIds = lensPostsPaginationIds.lensPostIds || [],
+      nextPageDatabaseId = lensPostsPaginationIds.nextPageDatabaseId || 0;
 
     console.log('lensPostsPaginationIds ----- ', lensPostsPaginationIds);
 
@@ -386,5 +393,3 @@ class GetNFTsForVote extends ServiceBase {
 }
 
 module.exports = GetNFTsForVote;
-
-// new GetNFTsForVote();

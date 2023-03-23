@@ -41,6 +41,7 @@ class LensPost extends ModelBase {
    * @param {number} dbRow.ipfs_object_id
    * @param {number} dbRow.total_votes
    * @param {number} dbRow.status
+   * @param {number} dbRow.curated_status
    * @param {string} dbRow.created_at
    * @param {string} dbRow.updated_at
    *
@@ -62,6 +63,7 @@ class LensPost extends ModelBase {
       ipfsObjectId: dbRow.ipfs_object_id,
       totalVotes: dbRow.total_votes,
       status: lensPostConstants.statuses[dbRow.status],
+      curatedStatus: lensPostConstants.curatedStatuses[dbRow.curated_status],
       createdAt: dbRow.created_at,
       updatedAt: dbRow.updated_at
     };
@@ -253,6 +255,34 @@ class LensPost extends ModelBase {
     const dbRows = await oThis.select('*').fire();
 
     return dbRows.length;
+  }
+
+  /**
+   * Fetch of lens posts with curated image.
+   *
+   * @returns {object}
+   */
+  async fetchRandomCuratedPostIds(params) {
+    const oThis = this;
+
+    const lensPostIds = [];
+
+    const queryObj = oThis
+      .select('id')
+      .where({ status: lensPostConstants.invertedStatuses[lensPostConstants.activeStatus] })
+      .where({ curated_status: lensPostConstants.invertedCuratedStatuses[lensPostConstants.curatedStatus] })
+      .order_by('RAND()')
+      .limit(params.limit);
+
+    const dbRows = await queryObj.fire();
+
+    for (let index = 0; index < dbRows.length; index++) {
+      lensPostIds.push(dbRows[index].id);
+    }
+
+    return {
+      lensPostIds: lensPostIds
+    };
   }
 }
 
