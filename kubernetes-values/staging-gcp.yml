@@ -12,7 +12,7 @@ serviceAccount:
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: "non-backend"
+fullnameOverride: "nftornot-staging-backend"
 
 podAnnotations: {}
 podSecurityContext: {}
