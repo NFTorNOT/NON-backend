@@ -27,10 +27,10 @@ ingress:
   className: nginx
   tls:
     - hosts:
-      - s.nftornot.com
+      - staging.nftornot.com
       secretName: nftornot.com
   hosts:
-    - host: s.nftornot.com
+    - host: staging.nftornot.com
       paths:
         - path: /api
           pathType: Prefix
