@@ -1,4 +1,4 @@
-name: Deploy to Staging
+name: Deploy to Staging on GCP
 
 on:
   workflow_dispatch:
@@ -12,69 +12,66 @@ on:
         required: true
         default: 'New feature release' 
 
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: us-west1 
+  GKE_CLUSTER: plg
+  GKE_ZONE: us-west1
+  DEPLOYMENT_NAME: non-backend  
+  REPOSITORY: plg-web3
+  IMAGE: non-backend
+
 jobs:
-  deploy:
-    name: Deploy
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.branch }}
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.inputs.branch }}
+    
+    - uses: actions/checkout@v2
+      with:
+        repository: "NFTorNOT/dev.secrets"
+        ref: "master"
+        token: ${{ secrets.PAT }}
+        path: "secrets"
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.THURSDAY_STAGING_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.THURSDAY_STAGING_SECRET_KEY }}
-          aws-region: us-east-2
-      
-      - uses: actions/checkout@v2
-        with:
-          repository: "NFTorNOT/dev.secrets"
-          ref: "master"
-          token: ${{ secrets.PAT }}
-          path: "secrets"
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+    - name: Build and push image
+      env:
+        ENV: "prod"
+        URL: "us-west1-docker.pkg.dev/plg-web3/nftornot-staging/non-backend"
+        TAG: ${{ github.run_id }}-${{ github.run_attempt }}
+      run: |-
+        mv secrets/nft-or-not-be/backend.staging.env .env 
+        rm -rf secrets
+        docker build --tag "$URL:$TAG" --build-arg ENV="$ENV" .
+        gcloud auth configure-docker us-west1-docker.pkg.dev --quiet --project plg-web3
+        docker push "$URL:$TAG"
 
-      - name: Create a ECR repo
-        shell: bash
-        run: |
-          aws ecr describe-repositories --repository-names ${{ github.event.repository.name }} || ( aws ecr create-repository --repository-name ${{ github.event.repository.name }}  && aws ecr put-lifecycle-policy --repository-name ${{ github.event.repository.name }} --lifecycle-policy-text "{\"rules\":[{\"rulePriority\":1,\"description\":\"Keep last 5 images\",\"selection\":{\"tagStatus\":\"any\",\"countType\":\"imageCountMoreThan\",\"countNumber\":5},\"action\":{\"type\":\"expire\"}}]}"  )
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ github.event.repository.name }}
-          IMAGE_TAG:  ${{ github.run_id }}-${{ github.run_attempt }}
-          ENV: ${{ secrets.STAGING_ENV_VARS }}
-        run: |
-          mv secrets/backend.staging.env .env 
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG  --build-arg ENV="$ENV" .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-      - uses: azure/setup-kubectl@v2.0
-        with:
-          version: "v1.23.6"
-        id: install
-
-      - name: "Deploy to EKS"
-        id: deploy-eks
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ github.event.repository.name }}
-          IMAGE_TAG:  ${{ github.run_id }}-${{ github.run_attempt }}
-          AWS_REGION: us-east-2
-          AWS_EKS_CLUSTER_NAME: thursday-staging
-        run: |-
-          aws eks update-kubeconfig --name ${AWS_EKS_CLUSTER_NAME} --region ${AWS_REGION}
-          helm upgrade --install \
-          --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY \
-          --set image.tag=${IMAGE_TAG} \
-          --namespace non \
-          --values ./kubernetes-values/staging.yaml \
-          nftornot-backend ./helm
+    - name: Set up GKE credentials
+      run: |-
+        gcloud components install gke-gcloud-auth-plugin --quiet
+        gcloud container clusters get-credentials plg --region us-west1 --project plg-web3
+    
+    - name: "Deploy to Kubernetes"
+      id: deploy-eks
+      env:         
+        URL: "us-west1-docker.pkg.dev/plg-web3/nftornot-staging/non-backend"
+        TAG: ${{ github.run_id }}-${{ github.run_attempt }}
+      run: |-
+        helm upgrade --install \
+        --set image.repository=${URL} \
+        --set image.tag=${TAG} \
+        --values ./kubernetes-values/staging-gcp.yaml \
+        nftornot-staging-backend ./helm
