@@ -13,9 +13,1323 @@
 			}
 		],
 		"components": {
-			"schemas": {}
+			"schemas": {
+				"active_theme_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"themes": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 100002,
+								"description": "BE notes: this is the id of themes table"
+							},
+							"name": {
+								"type": "string",
+								"example": "Light"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"name",
+							"uts"
+						]
+					},
+					"example": {
+						"100002": {
+							"id": 100002,
+							"name": "Light",
+							"uts": 1651666861
+						}
+					}
+				},
+				"suggestion_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"suggestions": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 123,
+								"description": "BE notes: this is the uuid"
+							},
+							"image_url": {
+								"type": "string",
+								"example": "https://stability/83cf4737-813e-4946-be36-812d853a9253.png"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"image_url",
+							"uts"
+						]
+					},
+					"example": {
+						"123": {
+							"id": 123,
+							"image_url": "https://stability/83cf4737-813e-4946-be36-812d853a9253.png",
+							"uts": 1651666861
+						}
+					}
+				},
+				"current_user": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "integer",
+							"example": 100009
+						},
+						"user_id": {
+							"type": "integer",
+							"example": 100009
+						},
+						"is_first_time_user": {
+							"type": "boolean",
+							"example": false
+						},
+						"uts": {
+							"type": "integer",
+							"example": 1651666861
+						}
+					},
+					"required": [
+						"id",
+						"user_id",
+						"uts"
+					]
+				},
+				"users": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 100002,
+								"description": "BE notes: this is the id of users table"
+							},
+							"lens_profile_id": {
+								"type": "string",
+								"example": "0xb1239"
+							},
+							"lens_profile_owner_address": {
+								"type": "string",
+								"example": "0x12345627a66f9CeF0402c2243e123457123A847267"
+							},
+							"lens_profile_username": {
+								"type": "string",
+								"example": "xyz.test"
+							},
+							"lens_profile_display_name": {
+								"type": "string",
+								"example": "xyz"
+							},
+							"lens_profile_image_id": {
+								"type": "integer",
+								"example": 100002
+							},
+							"status": {
+								"type": "string",
+								"example": "ACTIVE"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"lens_profile_id",
+							"lens_profile_owner_address",
+							"lens_profile_username",
+							"status",
+							"uts"
+						]
+					},
+					"example": {
+						"100002": {
+							"id": 100002,
+							"lens_profile_id": "0xb1239",
+							"lens_profile_owner_address": "0x12345627a66f9CeF0402c2243e123457123A847267",
+							"lens_profile_username": "xyz.test",
+							"lens_profile_display_name": "xyz",
+							"lens_profile_image_id": 100002,
+							"status": "ACTIVE",
+							"uts": 1651666861
+						}
+					}
+				},
+				"images": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 100009,
+								"description": "BE notes: this is the id of images table"
+							},
+							"url": {
+								"type": "string",
+								"example": "https://static.bucket.com/06223af8-eb4d-4f92-965b-4fdd1045bfc3.png"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"url",
+							"uts"
+						]
+					},
+					"example": {
+						"100009": {
+							"id": 100009,
+							"url": "https://static.bucket.com/06223af8-eb4d-4f92-965b-4fdd1045bfc3.png",
+							"uts": 1651666861
+						}
+					}
+				},
+				"lens_posts_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"lens_posts": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 100002,
+								"description": "BE notes: this is the id of lens posts table"
+							},
+							"theme_id": {
+								"type": "integer",
+								"example": 100005
+							},
+							"lens_publication_id": {
+								"type": "string",
+								"example": "0x56667-ab67"
+							},
+							"title": {
+								"type": "string",
+								"example": "Forgotten Prince"
+							},
+							"filter": {
+								"type": "string",
+								"example": "CINEMATIC"
+							},
+							"owner_user_id": {
+								"type": "integer",
+								"example": 100005
+							},
+							"description_text_id": {
+								"type": "integer",
+								"example": 100005
+							},
+							"image_id": {
+								"type": "integer",
+								"example": 100005
+							},
+							"ipfs_object_id": {
+								"type": "integer",
+								"example": 100005
+							},
+							"current_user_lens_post_relation_id": {
+								"type": "integer",
+								"example": 100002
+							},
+							"total_votes": {
+								"type": "integer",
+								"example": 10
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"theme_id",
+							"lens_publication_id",
+							"title",
+							"owner_user_id",
+							"description_text_id",
+							"image_id",
+							"ipfs_object_id",
+							"total_votes",
+							"uts"
+						]
+					},
+					"example": {
+						"100002": {
+							"id": 100002,
+							"theme_id": 100005,
+							"lens_publication_id": "0x56667-ab67",
+							"title": "Forgotten Prince",
+							"filter": "CINEMATIC",
+							"owner_user_id": 100005,
+							"description_text_id": 100005,
+							"image_id": 100005,
+							"ipfs_object_id": 100005,
+							"current_user_lens_post_relation_id": 100002,
+							"total_votes": 10,
+							"uts": 1651666861
+						}
+					}
+				},
+				"texts": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 100002,
+								"description": "BE notes: this is the id of texts table"
+							},
+							"text": {
+								"type": "string",
+								"example": "This is the description of image you have uploaded"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"text",
+							"uts"
+						]
+					},
+					"example": {
+						"100002": {
+							"id": 100002,
+							"text": "This is the description of image you have uploaded",
+							"uts": 1651666861
+						}
+					}
+				},
+				"stats": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "integer",
+							"example": 100002,
+							"description": "BE notes: this is the id of users table"
+						},
+						"uts": {
+							"type": "integer",
+							"example": 1651666861
+						},
+						"total_posts_count": {
+							"type": "integer",
+							"example": 123
+						}
+					},
+					"required": [
+						"id",
+						"uts",
+						"total_posts_count"
+					]
+				},
+				"user_stats": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "integer",
+							"example": 100002,
+							"description": "BE notes: this is the id of users table"
+						},
+						"uts": {
+							"type": "integer",
+							"example": 1651666861
+						},
+						"total_voted": {
+							"type": "integer",
+							"example": 123
+						},
+						"total_ignored": {
+							"type": "integer",
+							"example": 234
+						},
+						"total_no_reactions": {
+							"type": "integer",
+							"example": 345
+						}
+					},
+					"required": [
+						"id",
+						"uts",
+						"total_voted",
+						"total_ignored",
+						"total_no_reactions"
+					]
+				},
+				"current_user_lens_post_relations": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 100009,
+								"description": "BE notes: this is the id of images table"
+							},
+							"has_voted": {
+								"type": "integer",
+								"example": "https://static.bucket.com/06223af8-eb4d-4f92-965b-4fdd1045bfc3.png"
+							},
+							"has_ignored": {
+								"type": "integer",
+								"example": "1"
+							},
+							"collect_nft_transaction_hash": {
+								"type": "string",
+								"example": "0xad98a775cf5e9eb7ea9f9cbada0a1f0a33334a63edd5f04185bef0dc95774be4"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"has_voted",
+							"has_ignored",
+							"uts"
+						]
+					},
+					"example": {
+						"100009": {
+							"id": 100009,
+							"has_voted": "https://static.bucket.com/06223af8-eb4d-4f92-965b-4fdd1045bfc3.png",
+							"has_ignored": "1",
+							"collect_nft_transaction_hash": "0xad98a775cf5e9eb7ea9f9cbada0a1f0a33334a63edd5f04185bef0dc95774be4",
+							"uts": 1651666861
+						}
+					}
+				},
+				"ipfs_object_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"ipfs_objects": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 123,
+								"description": "BE notes: this is the id of ipfs objects table"
+							},
+							"cid": {
+								"type": "string",
+								"example": "QmVdjq683WzdS4gMCC9GjBdtL7sPPbrY1jSVbAQLGH4WG6"
+							},
+							"kind": {
+								"type": "string",
+								"example": "NFT_METADATA"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"cid",
+							"kind",
+							"uts"
+						]
+					},
+					"example": {
+						"123": {
+							"id": 123,
+							"cid": "QmVdjq683WzdS4gMCC9GjBdtL7sPPbrY1jSVbAQLGH4WG6",
+							"kind": "NFT_METADATA",
+							"uts": 1651666861
+						}
+					}
+				}
+			}
 		},
-		"paths": {}
+		"paths": {
+			"/api/active-themes": {
+				"get": {
+					"summary": "Get active themes",
+					"tags": [
+						"Generate Flow"
+					],
+					"parameters": [],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"active_theme_ids": {
+														"$ref": "#/components/schemas/active_theme_ids"
+													},
+													"themes": {
+														"$ref": "#/components/schemas/themes"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "active_theme_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "themes"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/image-suggestions": {
+				"get": {
+					"summary": "Get image suggestions generated by stable diffusion",
+					"tags": [
+						"Generate Flow"
+					],
+					"parameters": [
+						{
+							"in": "query string",
+							"name": "prompt",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "query string",
+							"name": "art_style",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"suggestion_ids": {
+														"$ref": "#/components/schemas/suggestion_ids"
+													},
+													"suggestions": {
+														"$ref": "#/components/schemas/suggestions"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "suggestion_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "suggestions"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/connect": {
+				"post": {
+					"summary": "Authenticate and signin user",
+					"tags": [
+						"Authenticaion"
+					],
+					"parameters": [
+						{
+							"in": "request body",
+							"name": "message",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "signed_message",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "wallet_address",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "lens_profile_username",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "lens_profile_id",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "lens_profile_display_name",
+							"required": false,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "lens_profile_image_url",
+							"required": false,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"current_user": {
+														"$ref": "#/components/schemas/current_user"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "current_user"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "current_user"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/nfts": {
+				"get": {
+					"summary": "Get all nfts and images to vote for a user",
+					"tags": [
+						"Vote NFTs"
+					],
+					"parameters": [
+						{
+							"in": "query string",
+							"name": "pagination_identifier",
+							"required": false,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"lens_posts_ids": {
+														"$ref": "#/components/schemas/lens_posts_ids"
+													},
+													"lens_posts": {
+														"$ref": "#/components/schemas/lens_posts"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"texts": {
+														"$ref": "#/components/schemas/texts"
+													},
+													"themes": {
+														"$ref": "#/components/schemas/themes"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"active_theme_ids": {
+														"$ref": "#/components/schemas/active_theme_ids"
+													},
+													"meta": {
+														"type": "object"
+													},
+													"stats": {
+														"$ref": "#/components/schemas/stats"
+													},
+													"user_stats": {
+														"$ref": "#/components/schemas/user_stats"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "lens_posts_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "lens_posts"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/hall-of-flame-nfts": {
+				"get": {
+					"summary": "Get all voted and collected nfts and images for a user",
+					"tags": [
+						"Collect NFTs"
+					],
+					"parameters": [
+						{
+							"in": "query string",
+							"name": "pagination_identifier",
+							"required": false,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"lens_posts_ids": {
+														"$ref": "#/components/schemas/lens_posts_ids"
+													},
+													"lens_posts": {
+														"$ref": "#/components/schemas/lens_posts"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"texts": {
+														"$ref": "#/components/schemas/texts"
+													},
+													"themes": {
+														"$ref": "#/components/schemas/themes"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"current_user_lens_post_relations": {
+														"$ref": "#/components/schemas/current_user_lens_post_relations"
+													},
+													"active_theme_ids": {
+														"$ref": "#/components/schemas/active_theme_ids"
+													},
+													"meta": {
+														"type": "object"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "lens_posts_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "lens_posts"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/current-user": {
+				"get": {
+					"summary": "Get authenticated user and details",
+					"tags": [
+						"Authenticaion"
+					],
+					"parameters": [],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"current_user": {
+														"$ref": "#/components/schemas/current_user"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "current_user"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "current_user"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/store-on-ipfs": {
+				"post": {
+					"summary": "Store image and metadata on ipfs and database",
+					"tags": [
+						"Generate Flow"
+					],
+					"parameters": [
+						{
+							"in": "request body",
+							"name": "image_url",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "title",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "description",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"ipfs_object_ids": {
+														"$ref": "#/components/schemas/ipfs_object_ids"
+													},
+													"ipfs_objects": {
+														"$ref": "#/components/schemas/ipfs_objects"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "ipfs_object_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "ipfs_objects"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/collect-nfts": {
+				"get": {
+					"summary": "Get all voted and collected nfts and images for a user",
+					"tags": [
+						"Collect NFTs"
+					],
+					"parameters": [
+						{
+							"in": "query string",
+							"name": "pagination_identifier",
+							"required": false,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"lens_posts_ids": {
+														"$ref": "#/components/schemas/lens_posts_ids"
+													},
+													"lens_posts": {
+														"$ref": "#/components/schemas/lens_posts"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"texts": {
+														"$ref": "#/components/schemas/texts"
+													},
+													"themes": {
+														"$ref": "#/components/schemas/themes"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"current_user_lens_post_relations": {
+														"$ref": "#/components/schemas/current_user_lens_post_relations"
+													},
+													"active_theme_ids": {
+														"$ref": "#/components/schemas/active_theme_ids"
+													},
+													"meta": {
+														"type": "object"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "lens_posts_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "lens_posts"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/reaction": {
+				"post": {
+					"summary": "Record reaction on nft and image",
+					"tags": [
+						"Vote NFTs"
+					],
+					"parameters": [
+						{
+							"in": "request body",
+							"name": "lens_post_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "reaction",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/collect": {
+				"post": {
+					"summary": "Mark lens post as collected nft",
+					"tags": [
+						"Collect NFTs"
+					],
+					"parameters": [
+						{
+							"in": "request body",
+							"name": "lens_post_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "collect_nft_transaction_hash",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/submit-to-vote": {
+				"post": {
+					"summary": "Record lens post and image",
+					"tags": [
+						"Generate Flow"
+					],
+					"parameters": [
+						{
+							"in": "request body",
+							"name": "theme_name",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "image_url",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "title",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "filter",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "lens_publication_id",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "description",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "lens_metadata_ipfs_object_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "image_ipfs_object_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/logout": {
+				"post": {
+					"summary": "Logs out authenticated user",
+					"tags": [
+						"Authenticaion"
+					],
+					"parameters": [],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/recent-upvoted-nfts": {
+				"get": {
+					"summary": "Get recent upvoted NFTs",
+					"tags": [
+						"Collect NFTs"
+					],
+					"parameters": [],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"lens_posts_ids": {
+														"$ref": "#/components/schemas/lens_posts_ids"
+													},
+													"lens_posts": {
+														"$ref": "#/components/schemas/lens_posts"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "lens_posts_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "lens_posts"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	},
 	"apis": [
 		"./routes/api/index"

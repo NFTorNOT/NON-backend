@@ -165,7 +165,7 @@ app.use(function(req, res, next) {
       'Access-Control-Allow-Headers',
       'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
     );
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', 'true');
 
     if (req.method === 'OPTIONS') {
@@ -179,8 +179,8 @@ app.use(function(req, res, next) {
 const swaggerSpecWeb = swaggerJSDoc(require(rootPrefix + '/config/apiParams/openapi.json'));
 const swaggerHtmlWeb = swaggerUi.generateHTML(swaggerSpecWeb);
 
-app.use('/api-docs/web', swaggerUi.serveFiles(swaggerSpecWeb));
-app.get('/api-docs/web', function(req, res) {
+app.use('/api-docs', swaggerUi.serveFiles(swaggerSpecWeb));
+app.get('/api-docs', function(req, res) {
   return res.send(swaggerHtmlWeb);
 });
 

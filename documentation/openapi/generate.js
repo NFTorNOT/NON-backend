@@ -34,6 +34,7 @@ class GenerateSwaggerSpec {
     oThis._initSwaggerSpec();
 
     for (const route in oThis.routesMap) {
+      console.log('Generating doc for route:', route);
       const routeInfo = oThis.routeSpecs[route];
       const apiName = routeInfo.apiName;
       const responseSignature = oThis.responseSignatures[apiName];
