@@ -75,6 +75,10 @@ const webResponse = {
 
   [apiNameConstants.addReactionToNFT]: {},
 
+  [apiNameConstants.submitToVote]: {},
+
+  [apiNameConstants.logout]: {},
+
   [apiNameConstants.getImageSuggestions]: {
     resultType: responseEntityKey.suggestionIds,
     resultTypeLookup: responseEntityKey.suggestions,
