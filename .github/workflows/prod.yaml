@@ -37,7 +37,7 @@ jobs:
     
     - uses: actions/checkout@v2
       with:
-        repository: "NFTorNOT/dev.secrets"
+        repository: "TrueSparrowSystems/dev.secrets"
         ref: "master"
         token: ${{ secrets.PAT }}
         path: "secrets"

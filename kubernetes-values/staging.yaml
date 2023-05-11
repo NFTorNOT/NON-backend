@@ -12,7 +12,7 @@ serviceAccount:
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: "nftornot-backend"
+fullnameOverride: "nftornot-staging-backend"
 
 podAnnotations: {}
 podSecurityContext: {}
@@ -24,18 +24,17 @@ service:
 
 ingress:
   enabled: true
-  className: alb
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/group.name: thursday
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/healthcheck-path: /health-checker
+  className: nginx
+  tls:
+    - hosts:
+      - staging.nftornot.com
+      secretName: nftornot.com
   hosts:
     - host: staging.nftornot.com
       paths:
         - path: /api
           pathType: Prefix
+
 
 resources:
   limits:
@@ -51,23 +50,34 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
 
+frontendProxy:
+  enabled: true
+  domainName: c.storage.googleapis.com
+  service:
+    name: nftornot-staging-frontend
+    path: "/"
+    pathType: Prefix
+    host: staging.nftornot.com
+  tls:
+      host: staging.nftornot.com
+      secretName: nftornot.com
 
+nodeSelector:
+    cloud.google.com/gke-spot: "true"
+    
 envSecrets:
   - envName: AWS_ACCESS_KEY_ID
-    secretName: thursday-staging-api-user
+    secretName: plg-user
     secretKey: AWS_ACCESS_KEY_ID
   - envName: AWS_SECRET_ACCESS_KEY
-    secretName: thursday-staging-api-user
+    secretName: plg-user
     secretKey: AWS_SECRET_ACCESS_KEY
   - envName: NA_MAIN_DB_MYSQL_HOST
-    secretName: non-staging-db
+    secretName: non-db-credentials
     secretKey: host
   - envName: NA_MAIN_DB_MYSQL_USER
-    secretName: non-staging-db
+    secretName: non-db-credentials
     secretKey: username
   - envName: NA_MAIN_DB_MYSQL_PASSWORD
-    secretName: non-staging-db
+    secretName: non-db-credentials
     secretKey: password
-  - envName: NA_MEMCACHE_SERVERS 
-    secretName: non-staging-memcached
-    secretKey: endpoint
