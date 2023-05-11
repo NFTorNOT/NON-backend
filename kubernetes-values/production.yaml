@@ -38,17 +38,29 @@ ingress:
 
 resources:
   limits:
-    cpu: 1
-    memory: 2Gi
+    cpu: 512m
+    memory: 1Gi
   requests:
-    cpu: 1
-    memory: 2Gi
+    cpu: 512m
+    memory: 1Gi
 
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
+
+frontendProxy:
+  enabled: true
+  domainName: c.storage.googleapis.com
+  service:
+    name: nftornot-production-frontend
+    path: "/"
+    pathType: Prefix
+    host: nftornot.com
+  tls:
+      host: nftornot.com
+      secretName: nftornot.com
 
 envSecrets:
   - envName: AWS_ACCESS_KEY_ID
