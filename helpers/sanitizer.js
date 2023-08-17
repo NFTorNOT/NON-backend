@@ -47,7 +47,10 @@ class SanitizeRecursively {
   _sanitizeString(str) {
     const sanitizedHtmlStr = sanitizeHtml(str, { allowedTags: [] });
 
-    return sanitizedHtmlStr.replace(/javascript:/g, '');
+    return sanitizedHtmlStr
+      .replace(/javascript:/g, '')
+      .replace(/data:/g, '')
+      .replace(/vbscript:/g, '');
   }
 }
 

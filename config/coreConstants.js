@@ -10,6 +10,10 @@ class CoreConstants {
     return process.env.NA_ENVIRONMENT;
   }
 
+  get port() {
+    return process.env.NA_PORT;
+  }
+
   get dbSuffix() {
     return process.env.NA_DB_SUFFIX;
   }
