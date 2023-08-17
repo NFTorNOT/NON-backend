@@ -8,7 +8,8 @@ const http = require('http');
 const rootPrefix = '..',
   app = require(rootPrefix + '/index'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
-  responseHelper = require(rootPrefix + '/lib/formatter/response');
+  responseHelper = require(rootPrefix + '/lib/formatter/response'),
+  coreConstants = require(rootPrefix + '/config/coreConstants');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -34,7 +35,7 @@ function normalizePort(val) {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.NA_PORT);
+var port = normalizePort(coreConstants.port);
 app.set('port', port);
 
 /**
