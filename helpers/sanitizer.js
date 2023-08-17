@@ -50,7 +50,7 @@ class SanitizeRecursively {
     return sanitizedHtmlStr
       .replace(/javascript:/g, '')
       .replace(/data:/g, '')
-      .replace(/vbscript/g, '');
+      .replace(/vbscript:/g, '');
   }
 }
 
