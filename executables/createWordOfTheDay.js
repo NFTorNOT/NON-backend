@@ -1,3 +1,5 @@
+// Deprecated cron
+
 const { uuid } = require('uuidv4');
 const moment = require('moment-timezone');
 const fs = require('fs');

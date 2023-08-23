@@ -1,12 +1,13 @@
 const fs = require('fs'),
   { uuid } = require('uuidv4'),
   execSync = require('child_process').execSync,
-  AWS = require('aws-sdk');
+  { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
 
-const basicHelper = require('../helpers/basic');
+const rootPrefix = '../..',
+  basicHelper = require('../helpers/basic'),
+  coreConstants = require('../config/coreConstants');
 
 class FetchImageFromStabilityAI {
-
   constructor(params) {
     const oThis = this;
 
@@ -32,7 +33,7 @@ class FetchImageFromStabilityAI {
 
     const filePath = await oThis.fetchImage();
 
-    if(!filePath) {
+    if (!filePath) {
       return oThis.response;
     }
 
@@ -51,36 +52,34 @@ class FetchImageFromStabilityAI {
   async fetchImage() {
     const oThis = this;
 
-    console.log('---- Start :: Fetch Image from stability api starts here ---- ', Math.floor(Date.now()/1000));
+    console.log('---- Start :: Fetch Image from stability api starts here ---- ', Math.floor(Date.now() / 1000));
 
-    if(!oThis.prompt || !basicHelper.validateNonEmptyString(oThis.prompt)) {
+    if (!oThis.prompt || !basicHelper.validateNonEmptyString(oThis.prompt)) {
       throw new Error('Prompt is empty');
     }
 
     oThis.prompt = oThis.prompt.replace('.', '');
-    oThis.prompt = oThis.prompt.replaceAll('\"','');
+    oThis.prompt = oThis.prompt.replaceAll('"', '');
 
-    oThis.prompt = '\"'+`${oThis.prompt}`+'\"';
-    oThis.prompt = oThis.artStyle ? `${oThis.prompt}, ${oThis.artStyle}`: oThis.prompt;
+    oThis.prompt = '"' + `${oThis.prompt}` + '"';
+    oThis.prompt = oThis.artStyle ? `${oThis.prompt}, ${oThis.artStyle}` : oThis.prompt;
 
     let imageFIlePathResp;
     try {
       imageFIlePathResp = await oThis.stabilityApiCall();
       return imageFIlePathResp;
-
     } catch (e) {
-      console.log("--------------------- Stability API Error ----------------", e.toString('utf8'));
-
+      console.log('--------------------- Stability API Error ----------------', e.toString('utf8'));
 
       const error = e.toString('utf8');
       if (error.includes('Invalid prompts detected')) {
-        oThis.response.error = {message: "Invalid prompts detected"};
+        oThis.response.error = { message: 'Invalid prompts detected' };
       } else {
-        oThis.response.error = {message: "Failed to generate image"};
+        oThis.response.error = { message: 'Failed to generate image' };
       }
     }
 
-    console.log('---- End :: Fetch Image from stability api ends here ---- ', Math.floor(Date.now()/1000));
+    console.log('---- End :: Fetch Image from stability api ends here ---- ', Math.floor(Date.now() / 1000));
   }
 
   /**
@@ -97,26 +96,21 @@ class FetchImageFromStabilityAI {
       prompt: oThis.prompt
     };
 
-    execSync(
-      `python3 -m stability_sdk.client -W 512 -H 512 ${oThis.prompt}`,
-      {
-        shell: true,
-        cwd: `${oThis.dataDir}`,
-        env: Object.assign({},
-          process.env,
-          {
-            STABILITY_KEY: process.env.STABILITY_KEY,
-            NODE_PATH: process.cwd() + '/node_modules'
-          })
-      }
-    );
+    execSync(`python3 -m stability_sdk.client -W 512 -H 512 ${oThis.prompt}`, {
+      shell: true,
+      cwd: `${oThis.dataDir}`,
+      env: Object.assign({}, process.env, {
+        STABILITY_KEY: process.env.STABILITY_KEY,
+        NODE_PATH: process.cwd() + '/node_modules'
+      })
+    });
 
     let imageFileName = null;
 
     const fileNames = fs.readdirSync(oThis.dataDir);
 
-    for(let fileName of fileNames) {
-      if(fileName.endsWith('.png')) {
+    for (let fileName of fileNames) {
+      if (fileName.endsWith('.png')) {
         imageFileName = fileName;
       }
     }
@@ -155,23 +149,20 @@ class FetchImageFromStabilityAI {
       Bucket: bucket,
       Key: S3FilePath,
       Body: fs.createReadStream(filePath),
-      ACL:'public-read',
+      ACL: 'public-read',
       ContentType: 'image/png'
     };
 
-    return new Promise(function(onResolve, reject) {
-      AWSS3.upload(params)
-        .promise()
-        .then(function(resp) {
-          const location = {url: resp.Location || ''};
-          oThis.response.image = { url: oThis._replaceS3UrlWithCDN(location.url) };
-          onResolve(console.log("success", resp));
-        })
-        .catch(function(err) {
-          console.error('Error in uploading image to S3 ------- ', err);
-          reject(err);
-        });
-    });
+    try {
+      const command = new PutObjectCommand(params);
+      const response = await s3Client.send(command);
+      const location = { url: response.Location || '' };
+      oThis.response.image = { url: oThis._replaceS3UrlWithCDN(location.url) };
+      console.log('success', response);
+    } catch (err) {
+      console.error('Error in uploading image to S3 ------- ', err);
+      throw err;
+    }
   }
 
   /**
@@ -181,12 +172,12 @@ class FetchImageFromStabilityAI {
    * @returns {Promise<void>}
    */
   async removeDirectory(directory) {
-    fs.rm(directory, { recursive: true }, err => {
+    fs.rm(directory, { recursive: true }, (err) => {
       if (err) {
-        throw err
+        throw err;
       }
 
-      console.log(`${directory} is deleted!`)
+      console.log(`${directory} is deleted!`);
     });
   }
 
@@ -196,26 +187,26 @@ class FetchImageFromStabilityAI {
    * @returns {Promise<S3>}
    */
   async getInstance() {
-
-    const AWSInstance = new AWS.S3({
-      region: 'us-east-1',
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    const s3Client = new S3Client({
+      region: coreConstants.S3_REGION,
+      credentials: {
+        accessKeyId: coreConstants.S3_ACCESS_KEY_ID,
+        secretAccessKey: coreConstants.S3_SECRET_ACCESS_KEY
+      }
     });
 
-    return AWSInstance;
+    return s3Client;
   }
 
   /**
    * Replaces S3 url with it's cdn
-   * 
-   * @param {string} s3url 
-   * @returns 
+   *
+   * @param {string} s3url
+   * @returns
    */
   _replaceS3UrlWithCDN(s3url) {
-
     const urlParts = s3url.split('/'),
-      filePathParts = urlParts.splice(3,5);
+      filePathParts = urlParts.splice(3, 5);
 
     return `https://static.nftornot.com/${filePathParts.join('/')}`;
   }
