@@ -25,6 +25,7 @@
     "apollo-client": "2.6.10",
     "apollo-link-http": "1.5.17",
     "axios": "0.27.2",
+    "commander": "^11.0.0",
     "continuation-local-storage": "3.2.1",
     "cookie-parser": "1.4.5",
     "cors": "2.8.5",
