@@ -29,6 +29,9 @@ class GetCurrentUser extends ServiceBase {
     oThis.currentUserId = oThis.currentUser.id;
 
     oThis.imagesMap = {};
+
+    console.log('oThis.currentUser GetCurrentUser: ', oThis.currentUser);
+    console.log('oThis.currentUserId GetCurrentUser: ', oThis.currentUserId);
   }
 
   /**
