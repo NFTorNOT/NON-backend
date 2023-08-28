@@ -25,8 +25,6 @@ const apiRoutes = require(rootPrefix + '/routes/api/index');
 const errorConfig = basicHelper.fetchErrorConfig();
 const apiHostName = new URL(coreConstants.API_DOMAIN).hostname;
 
-const cors = require('cors');
-
 morgan.token('id', function getId(req) {
   return req.id;
 });
@@ -160,19 +158,18 @@ process.title = 'API node worker';
 const app = express();
 
 app.use(function(req, res, next) {
-  if (!basicHelper.isProduction()) {
-    res.header('Access-Control-Allow-Methods', 'DELETE, GET, POST, PUT, OPTIONS, PATCH');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
-    );
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'DELETE, GET, POST, PUT, OPTIONS, PATCH');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
+  );
+  res.header('Access-Control-Allow-Origin', coreConstants.FRONTEND_DOMAIN);
+  res.header('Access-Control-Allow-Credentials', 'true');
 
-    if (req.method === 'OPTIONS') {
-      return res.status(200).json();
-    }
+  if (req.method === 'OPTIONS') {
+    return res.status(200).json();
   }
+
   next();
 });
 

@@ -22,6 +22,10 @@ class CoreConstants {
     return process.env.NA_ENVIRONMENT.substring(0, 2);
   }
 
+  get FRONTEND_DOMAIN() {
+    return process.env.NA_FRONTEND_DOMAIN;
+  }
+
   // DevOps error logs framework details.
   get APP_NAME() {
     return process.env.NA_DEVOPS_APP_NAME;
